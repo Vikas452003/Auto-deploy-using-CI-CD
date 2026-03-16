@@ -1,4 +1,4 @@
-name: Terraform CI Pipeline
+name: Terraform Validation
 
 on:
   push:
@@ -8,29 +8,23 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Workflow
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend=false
         working-directory: terraform
 
       - name: Terraform Validate
         run: terraform validate
         working-directory: terraform
 
-      - name: Terraform Plan
-        run: terraform plan
+      - name: Terraform Format Check
+        run: terraform fmt -check
         working-directory: terraform
-
-      - name: Run Deployment Script
-        run: |
-          chmod +x scripts/deploy.sh
-          ./scripts/deploy.sh
