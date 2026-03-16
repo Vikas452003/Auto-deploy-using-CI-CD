@@ -1,0 +1,29 @@
+stages:
+  - validate
+  - plan
+  - deploy
+
+image: hashicorp/terraform:latest
+
+before_script:
+  - cd terraform
+
+validate:
+  stage: validate
+  script:
+    - terraform init
+    - terraform validate
+
+plan:
+  stage: plan
+  script:
+    - terraform init
+    - terraform plan
+
+deploy_app:
+  stage: deploy
+  script:
+    - echo "Deploying application"
+    - cd ../scripts
+    - chmod +x deploy.sh
+    - ./deploy.sh
